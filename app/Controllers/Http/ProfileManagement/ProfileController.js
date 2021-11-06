@@ -56,7 +56,7 @@ class ProfileController {
 
       return response.status(201).json({
         status: 'Created',
-        message: 'Profile Updated Successfully.',
+        message: 'Profile updated successfully.',
         status_code: 201,
       });
     } catch (error) {

@@ -92,7 +92,7 @@ class RegistrationController {
       if (!user) {
         return response.status(400).json({
           status: 'Bad Request',
-          message: 'Incorrect Verification Code.',
+          message: 'Incorrect verification code.',
           status_code: 400,
         });
       }
@@ -113,13 +113,13 @@ class RegistrationController {
 
         return response.status(200).json({
           status: 'Success',
-          message: 'Your Account Have Been Verified.',
+          message: 'Your account have been verified successfully.',
           status_code: 200,
         });
       } else {
         return response.status(400).send({
           status: 'Bad Request',
-          message: 'Verification Code Has Expired',
+          message: 'Verification code has expired',
           status_code: 400,
         });
       }
@@ -207,7 +207,7 @@ class RegistrationController {
 
       return response.status(201).json({
         status: 'Created',
-        message: 'New Verification Code Sent Successfully.',
+        message: 'New verification code sent successfully.',
         status_code: 201,
       });
     } catch (error) {

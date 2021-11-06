@@ -21,7 +21,7 @@ class LogoutController {
 
       return response.status(200).json({
         status: 'Success',
-        message: 'Logged Out Successfully.',
+        message: 'Logged out successfully.',
         status_code: 200,
       });
       

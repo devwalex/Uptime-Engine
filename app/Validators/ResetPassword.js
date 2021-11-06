@@ -5,6 +5,7 @@ class ResetPassword {
     return {
       // validation rules
       new_password: 'required|string|min:6',
+      verification_code: 'required|string',
     };
   }
 
@@ -12,6 +13,8 @@ class ResetPassword {
     return {
       'new_password.required': 'New password is required.',
       'new_password.min': 'New password must be at least 6 characters.',
+      'verification_code.required': 'Verification code is required.',
+
     };
   }
 

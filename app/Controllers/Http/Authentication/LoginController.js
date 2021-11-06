@@ -60,7 +60,7 @@ class LoginController {
       if (error.authScheme === 'jwt') {
         return response.status(400).json({
           status: 'Bad Request',
-          message: 'Incorrect Login Details, Please Try Again.',
+          message: 'Incorrect login details, please try again.',
           status_code: 400,
         });
       }

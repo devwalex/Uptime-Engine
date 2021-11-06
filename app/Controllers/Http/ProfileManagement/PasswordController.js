@@ -21,7 +21,7 @@ class PasswordController {
       if (!user) {
         return response.status(400).json({
           status: 'Bad Request',
-          message: 'Incorrect Email.',
+          message: 'Incorrect email.',
           status_code: 400,
         });
       }
@@ -62,9 +62,9 @@ class PasswordController {
     }
   }
 
-  async resetPassword({ request, response, params: { verification_code } }) {
+  async resetPassword({ request, response }) {
     try {
-      const { new_password } = request.post();
+      const { new_password, verification_code } = request.post();
 
       const user = await User.findBy('verification_code', verification_code);
 
@@ -82,7 +82,7 @@ class PasswordController {
       if (checkPassword) {
         return response.status(400).json({
           status: 'Bad Request',
-          message: 'Old Password And New Password Cannot Be The Same.',
+          message: 'Old password and new password cannot be the same.',
           status_code: 400,
         });
       }
@@ -101,13 +101,10 @@ class PasswordController {
 
         return response.status(201).json({
           status: 'Created',
-          message: 'Reset Password Successfully.',
+          message: 'Reset password successfully.',
           status_code: 201,
         });
       } else {
-        user.verification_code = null;
-        await user.save();
-
         return response.status(400).send({
           status: 'Bad Request',
           message: 'Reset password code has expired.',
@@ -138,7 +135,7 @@ class PasswordController {
       if (!verifyPassword) {
         return response.status(400).json({
           status: 'Bad Request',
-          message: 'Old Password Is Incorrect.',
+          message: 'Old password is incorrect.',
           status_code: 400,
         });
       }
@@ -152,7 +149,7 @@ class PasswordController {
       if (checkPassword) {
         return response.status(400).json({
           status: 'Bad Request',
-          message: 'Old Password And New Password Cannot Be The Same.',
+          message: 'Old password and new password cannot be the same.',
           status_code: 400,
         });
       }
