@@ -44,7 +44,7 @@ Route.put('/auth/edit-profile', 'ProfileManagement/ProfileController.editProfile
 
 Route.put('/auth/change-password', 'ProfileManagement/PasswordController.changePassword').validator('ChangePassword').middleware(['auth:jwt']);
 Route.post('/forgot-password', 'ProfileManagement/PasswordController.forgotPassword');
-Route.put('/reset-password/:verification_code','ProfileManagement/PasswordController.resetPassword').validator('ResetPassword');
+Route.put('/reset-password','ProfileManagement/PasswordController.resetPassword').validator('ResetPassword');
 
 // =========== PROFILE MANAGEMENT ROUTE ENDS ========================
 
