@@ -117,9 +117,6 @@ class RegistrationController {
           status_code: 200,
         });
       } else {
-        user.verification_code = null;
-        await user.save();
-
         return response.status(400).send({
           status: 'Bad Request',
           message: 'Verification Code Has Expired',
