@@ -7,10 +7,6 @@ const Event = use('Event');
 const Env = use('Env');
 
 // const sendSms = use('App/HelperFunctions/SendSms');
-
-// 10 minutes
-const verification_code_validity = 600000;
-
 class RegistrationController {
   async register({ request, response }) {
     try {
@@ -32,9 +28,9 @@ class RegistrationController {
       user.password = password;
       user.role_id = role.id;
       user.verification_code = randomString({
-        length: 6,
+        length: 30,
         numeric: true,
-        letters: false,
+        letters: true,
         special: false,
       });
 
@@ -48,11 +44,17 @@ class RegistrationController {
         await domain.save()
 
 
+        const appUrl = Env.get('FRONTEND_URL')
+        ? Env.get('FRONTEND_URL')
+        : Env.get('APP_URL');
+
+      const verification_link = `${appUrl}/account/verify/${user.verification_code}`;
+
         const mailDetails = {
           first_name: user.first_name,
           last_name: user.last_name,
           email: user.email,
-          verification_code: user.verification_code
+          verification_link,
         };
 
         // It triggers the sendVerificationMail event
@@ -76,53 +78,28 @@ class RegistrationController {
     }
   }
 
-  async verifyAccount({ response, request }) {
+  async verifyAccount({ response, params: { verification_code } }) {
     try {
-      const { verification_code } = request.post()
-
-      if (!verification_code) {
-        return response.status(400).json({
-          status: 'Bad Request',
-          message: 'Verification code is required.',
-          status_code: 400,
-        });
-      }
       const user = await User.findBy('verification_code', verification_code);
 
       if (!user) {
         return response.status(400).json({
           status: 'Bad Request',
-          message: 'Incorrect verification code.',
+          message: 'Incorrect verification link.',
           status_code: 400,
         });
       }
 
-      const current_date = new Date();
-      const current_time = current_date.getTime();
+      user.is_verified = 1;
+      user.is_active = 1;
+      user.verification_code = null;
+      await user.save();
 
-      const verification_code_send_date = user.updated_at;
-      const verification_code_send_time = verification_code_send_date.getTime();
-
-      const time_difference = current_time - verification_code_send_time;
-
-      if (time_difference <= verification_code_validity) {
-        user.is_verified = 1;
-        user.is_active = 1;
-        user.verification_code = null;
-        await user.save();
-
-        return response.status(200).json({
-          status: 'Success',
-          message: 'Your account have been verified successfully.',
-          status_code: 200,
-        });
-      } else {
-        return response.status(400).send({
-          status: 'Bad Request',
-          message: 'Verification code has expired',
-          status_code: 400,
-        });
-      }
+      return response.status(200).json({
+        status: 'Success',
+        message: 'Your account have been verified successfully.',
+        status_code: 200,
+      });
 
     } catch (error) {
       console.error('Account Verification Error >>>>>', error);
@@ -165,53 +142,37 @@ class RegistrationController {
         });
       }
 
-      const current_date = new Date();
-      const current_time = current_date.getTime();
-
-      const verification_code_send_date = user.updated_at;
-      const verification_code_send_time = verification_code_send_date.getTime();
-
-      const time_difference = current_time - verification_code_send_time;
-
-      if (time_difference < verification_code_validity) {
-        const timeLeft =
-          Math.floor((verification_code_validity / 1000 / 60) << 0) -
-          Math.floor((time_difference / 1000 / 60) << 0);
-        return response.status(400).json({
-          status: 'Bad Request',
-          message: `You need to wait for ${timeLeft > 1
-              ? `${timeLeft} minutes before you can generate another verification code.`
-              : `a minute before you can generate another verification code.`
-            }`,
-          status_code: 400,
-        });
-      }
-
       user.verification_code = randomString({
-        length: 6,
+        length: 30,
         numeric: true,
-        letters: false,
+        letters: true,
         special: false,
       });
       await user.save();
 
+      const appUrl = Env.get('FRONTEND_URL')
+      ? Env.get('FRONTEND_URL')
+      : Env.get('APP_URL');
+
+    const verification_link = `${appUrl}/account/verify/${user.verification_code}`;
 
       const mailDetails = {
         first_name: user.first_name,
         last_name: user.last_name,
         email: user.email,
-        verification_code: user.verification_code
+        verification_link,
       };
+
       // It triggers the sendVerificationMail event
       Event.fire('sendVerificationMail', mailDetails);
 
       return response.status(201).json({
         status: 'Created',
-        message: 'New verification code sent successfully.',
+        message: 'New verification link sent successfully.',
         status_code: 201,
       });
     } catch (error) {
-      console.error('Resend Verification Code Error >>>>>', error);
+      console.error('Resend Verification link Error >>>>>', error);
       return response.status(500).json({
         status: 'Internal Server Error',
         message: 'An unexpected error occurred.',

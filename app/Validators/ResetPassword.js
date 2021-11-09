@@ -4,17 +4,14 @@ class ResetPassword {
   get rules() {
     return {
       // validation rules
-      new_password: 'required|string|min:6',
-      verification_code: 'required|string',
+      new_password: 'required|string|min:6'
     };
   }
 
   get messages() {
     return {
       'new_password.required': 'New password is required.',
-      'new_password.min': 'New password must be at least 6 characters.',
-      'verification_code.required': 'Verification code is required.',
-
+      'new_password.min': 'New password must be at least 6 characters.'
     };
   }
 

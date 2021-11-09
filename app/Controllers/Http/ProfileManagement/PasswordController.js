@@ -7,8 +7,6 @@ const Event = use('Event');
 const Hash = use('Hash');
 const Env = use('Env');
 
-// 10 minutes
-const verification_code_validity = 600000;
 
 class PasswordController {
 
@@ -27,21 +25,25 @@ class PasswordController {
       }
 
       user.verification_code = randomString({
-        length: 6,
+        length: 30,
         numeric: true,
-        letters: false,
+        letters: true,
         special: false,
       });
-
       await user.save();
 
+      const appUrl = Env.get('FRONTEND_URL')
+      ? Env.get('FRONTEND_URL')
+      : Env.get('APP_URL');
 
-        const mailDetails = {
-          first_name: user.first_name,
-          last_name: user.last_name,
-          email: user.email,
-          verification_code: user.verification_code
-        };
+    const verification_link = `${appUrl}/account/verify/${user.verification_code}`;
+
+      const mailDetails = {
+        first_name: user.first_name,
+        last_name: user.last_name,
+        email: user.email,
+        verification_link,
+      };
         // It triggers the resetPasswordMail event
         
         Event.fire('resetPasswordMail', mailDetails);
@@ -62,16 +64,16 @@ class PasswordController {
     }
   }
 
-  async resetPassword({ request, response }) {
+  async resetPassword({ request, response, params: { verification_code } }) {
     try {
-      const { new_password, verification_code } = request.post();
+      const { new_password } = request.post();
 
       const user = await User.findBy('verification_code', verification_code);
 
       if (!user) {
         return response.status(400).json({
           status: 'Bad Request',
-          message: 'Incorrect reset password code.',
+          message: 'Incorrect reset password link.',
           status_code: 400,
         });
       }
@@ -87,14 +89,6 @@ class PasswordController {
         });
       }
 
-      const current_date = new Date();
-      const current_time = current_date.getTime();
-
-      const verification_code_send_date = user.updated_at;
-      const verification_code_send_time = verification_code_send_date.getTime();
-
-      const time_difference = current_time - verification_code_send_time;
-      if (time_difference <= verification_code_validity) {
         user.verification_code = null;
         user.password = new_password;
         await user.save();
@@ -104,13 +98,7 @@ class PasswordController {
           message: 'Reset password successfully.',
           status_code: 201,
         });
-      } else {
-        return response.status(400).send({
-          status: 'Bad Request',
-          message: 'Reset password code has expired.',
-          status_code: 400,
-        });
-      }
+
     } catch (error) {
       console.error('Reset Password Error >>>>>>>', error);
       return response.status(500).json({

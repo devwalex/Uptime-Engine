@@ -22,7 +22,7 @@ Route.get('/', () => {
 
 // =========== USER MANAGEMENT ROUTE STARTS ========================
 Route.post('/register', 'UserManagement/User/RegistrationController.register').validator('Registration');
-Route.post('/account/verify', 'UserManagement/User/RegistrationController.verifyAccount');
+Route.post('/account/verify/:verification_code', 'UserManagement/User/RegistrationController.verifyAccount');
 Route.post('/account/resend-code', 'UserManagement/User/RegistrationController.resendVerificationCode');
 
 // =========== USER MANAGEMENT ROUTE ENDS ========================
@@ -44,7 +44,7 @@ Route.put('/auth/edit-profile', 'ProfileManagement/ProfileController.editProfile
 
 Route.put('/auth/change-password', 'ProfileManagement/PasswordController.changePassword').validator('ChangePassword').middleware(['auth:jwt']);
 Route.post('/forgot-password', 'ProfileManagement/PasswordController.forgotPassword');
-Route.put('/reset-password','ProfileManagement/PasswordController.resetPassword').validator('ResetPassword');
+Route.put('/reset-password/:verification_code','ProfileManagement/PasswordController.resetPassword').validator('ResetPassword');
 
 // =========== PROFILE MANAGEMENT ROUTE ENDS ========================
 
