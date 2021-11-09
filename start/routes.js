@@ -22,7 +22,7 @@ Route.get('/', () => {
 
 // =========== USER MANAGEMENT ROUTE STARTS ========================
 Route.post('/register', 'UserManagement/User/RegistrationController.register').validator('Registration');
-Route.post('/account/verify/:verification_code', 'UserManagement/User/RegistrationController.verifyAccount');
+Route.get('/account/verify/:verification_code', 'UserManagement/User/RegistrationController.verifyAccount');
 Route.post('/account/resend-code', 'UserManagement/User/RegistrationController.resendVerificationCode');
 
 // =========== USER MANAGEMENT ROUTE ENDS ========================
