@@ -36,7 +36,7 @@ class PasswordController {
       ? Env.get('FRONTEND_URL')
       : Env.get('APP_URL');
 
-    const verification_link = `${appUrl}/account/verify/${user.verification_code}`;
+    const verification_link = `${appUrl}/reset-password/${user.verification_code}`;
 
       const mailDetails = {
         first_name: user.first_name,
