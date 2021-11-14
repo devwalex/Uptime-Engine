@@ -185,8 +185,8 @@ class SubscriptionController {
   async paymentWebHook({ request, response }) {
     try {
       // validate event
-      // var hash = crypto.createHmac('sha512', secret).update(JSON.stringify(request.body)).digest('hex');
-      // if (hash === request.headers['x-paystack-signature']) {
+      var hash = crypto.createHmac('sha512', secret).update(JSON.stringify(request.body)).digest('hex');
+      if (hash === request.headers['x-paystack-signature']) {
 
       var result = request.body;
       console.log('result', result);
@@ -227,7 +227,7 @@ class SubscriptionController {
       }
 
 
-      // }
+      }
     } catch (error) {
       console.error('paymentWebHook Error ==>', error);
       return response.status(500).json({
