@@ -9,10 +9,10 @@ class SubscriptionSchema extends Schema {
       table.increments()
       table.integer('user_id')
       table.string('plan_code')
-      table.boolean('is_on_trial').defaultTo(false)
+      table.integer('trial_period')
       table.datetime('start_date')
-      table.datetime('end_date')
       table.boolean('is_active').defaultTo(false)
+      table.boolean('is_deleted').defaultTo(false)
       table.timestamp('created_at').defaultTo(this.fn.now());
       table.timestamp('updated_at').defaultTo(this.fn.now());
     })

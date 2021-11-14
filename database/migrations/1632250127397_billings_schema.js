@@ -11,7 +11,6 @@ class BillingsSchema extends Schema {
       table.string('email')
       table.text('authorization')
       table.string('customer_code')
-      table.string('plan_code')
       table.boolean('is_active').defaultTo(false)
       table.boolean('is_verified').defaultTo(false)
       table.boolean('is_deleted').defaultTo(false)

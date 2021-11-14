@@ -64,6 +64,9 @@ Route.post('/verify/subscription', 'Billing/SubscriptionController.verifySubscri
 
 Route.get('/auth/plans', 'Billing/PlanController.getPlans').middleware(['auth:jwt']);
 
+Route.post('/payment/webhook', 'Billing/SubscriptionController.paymentWebHook')
+
+
 
 // =========== BILLING ROUTE ENDS ========================
 
