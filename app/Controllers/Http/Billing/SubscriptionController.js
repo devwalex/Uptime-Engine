@@ -184,10 +184,13 @@ class SubscriptionController {
 
   async paymentWebHook({ request, response }) {
     try {
-      console.log('Here');
-
+      console.log('Here', request.body);
+      
       // validate event
       var hash = crypto.createHmac('sha512', secret).update(JSON.stringify(request.body)).digest('hex');
+
+      console.log('Compare', hash, request.headers['x-paystack-signature']);
+
       if (hash === request.headers['x-paystack-signature']) {
 
       var result = request.body;
