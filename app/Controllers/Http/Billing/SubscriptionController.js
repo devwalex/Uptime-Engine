@@ -120,7 +120,7 @@ class SubscriptionController {
       const processSubscription = await paystack.subscription.create({
         customer: billing.customer_code,
         plan: subscription.plan_code,
-        // authorization: JSON.parse(billing.authorization)
+        authorization: JSON.parse(billing.authorization)['authorization_code']
       })
 
 
