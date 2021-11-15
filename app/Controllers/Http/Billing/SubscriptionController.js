@@ -189,9 +189,9 @@ class SubscriptionController {
       // validate event
       var hash = crypto.createHmac('sha512', secret).update(JSON.stringify(request.body)).digest('hex');
 
-      console.log('Compare', hash, request.headers['x-paystack-signature']);
+      console.log('Compare', hash, request.header('x-paystack-signature'));
 
-      if (hash === request.headers['x-paystack-signature']) {
+      if (hash === request.header('x-paystack-signature')) {
 
       var result = request.body;
       console.log('result', result);
