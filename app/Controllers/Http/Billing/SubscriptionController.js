@@ -199,6 +199,7 @@ class SubscriptionController {
       const user = await User.findBy('email', result.data.customer.email)
       if (result.event === 'charge.success') {
         const billing = await Billing.query().where('user_id', user.id).first()
+        console.log('billing', billing);
         if (!billing.is_verified) {
           if (result.data.status === 'success') {
             billing.email = result.data.customer.email
@@ -207,6 +208,8 @@ class SubscriptionController {
             billing.is_active = true
             billing.is_verified = true
             await billing.save()
+
+            console.log('billing2', billing);
 
             // Refund 
             await paystack.refund.create({ transaction: result.data.id, amount: result.data.amount })
