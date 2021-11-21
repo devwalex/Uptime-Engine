@@ -1,6 +1,6 @@
 'use strict'
 const User = use('App/Models/User');
-const Domain = use('App/Models/Domain');
+const Project = use('App/Models/Project');
 const Role = use('App/Models/Role');
 const randomString = require('random-string');
 const Event = use('Event');
@@ -37,11 +37,12 @@ class RegistrationController {
       await user.save();
 
       if (user) {
-        const domain = new Domain()
-        domain.domain_name = domain_name
-        domain.user_id = user.id
-        // domain.is_active = true
-        await domain.save()
+        const project = new Project()
+        project.address = domain_name
+        project.user_id = user.id
+        project.type = 'domain_name'
+        project.description = domain_name
+        await project.save()
 
 
         const appUrl = Env.get('FRONTEND_URL')

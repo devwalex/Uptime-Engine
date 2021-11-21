@@ -1,0 +1,41 @@
+@layout('emails.email_base')
+@section('email_body')
+
+  <tr>
+		<td style="font-family: sans-serif; vertical-align: top;">
+      
+      <p style="font-family: sans-serif; color:#3d3c3c; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 20px; Margin-top: 20px;">
+        Hi {{first_name}} {{last_name}},
+      </p>
+
+      <p style="font-family: sans-serif; color:#3d3c3c; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 20px;">
+        Below is your project current status report:
+      </p>
+
+      <p style="font-family: sans-serif; color:#3d3c3c; font-size: 14px; font-weight: bold; margin: 0; Margin-bottom: 20px;">
+        Project Name: {{project.description}} <br> 
+        Project Address: {{project.address}} <br>
+        Project Type: {{project.type}} <br>
+        Current Status: {{project.current_status}} <br>
+        Last Time Status Changed: {{project.last_status_change_time}} <br>
+        @if(report.reason)
+        Reason: {{report.reason}} <br>
+        @endif
+        @if(report.load_time)
+        Load Time: {{ report.load_time}} <br>
+        @endif
+      </p>
+
+
+
+      <p style="font-family: sans-serif; color:#3d3c3c; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 20px; Margin-top: 50px;">
+      Warm Regards, <br>
+      Uptime.ng Team.
+      </p>
+      
+
+
+		</td>
+	</tr>
+
+@endsection

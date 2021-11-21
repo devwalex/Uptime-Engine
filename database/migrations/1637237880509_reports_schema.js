@@ -3,22 +3,23 @@
 /** @type {import('@adonisjs/lucid/src/Schema')} */
 const Schema = use('Schema')
 
-class DomainReportsSchema extends Schema {
+class ReportsSchema extends Schema {
   up () {
-    this.create('domain_reports', (table) => {
+    this.create('reports', (table) => {
       table.increments()
-      table.integer('domain_id')
-      table.enum('status', ['up', 'down'])
+      table.integer('project_id').notNullable()
+      table.string('status')
       table.string('reason')
-      table.string('duration')
+      table.string('load_time')
+      table.datetime('last_status_change_time')
       table.timestamp('created_at').defaultTo(this.fn.now());
       table.timestamp('updated_at').defaultTo(this.fn.now());
     })
   }
 
   down () {
-    this.drop('domain_reports')
+    this.drop('reports')
   }
 }
 
-module.exports = DomainReportsSchema
+module.exports = ReportsSchema

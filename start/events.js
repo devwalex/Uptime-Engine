@@ -16,3 +16,11 @@ Event.on('resetPasswordMail', async (mailDetails) => {
     message.subject('Reset Password Code');
   });
 });
+
+Event.on('sendProjectCurrentStatusReport', async (mailDetails) => {
+  await Mail.send('emails.project_report_status_email', mailDetails, (message) => {
+    message.from('no-reply@uptime.ng', 'Uptime.ng');
+    message.to(mailDetails.email);
+    message.subject('Your Project Current Status Report');
+  });
+});

@@ -8,6 +8,7 @@ var secret = 'sk_test_050b26c2a17145b5e696cf824ef7ea8aecafb240';
 const Billing = use('App/Models/Billing')
 const Subscription = use('App/Models/Subscription')
 const User = use('App/Models/User')
+const Project = use('App/Models/Project');
 
 function calculateExpiryDate(days) {
   var expiryDate = new Date();
@@ -184,22 +185,16 @@ class SubscriptionController {
 
   async paymentWebHook({ request, response }) {
     try {
-      console.log('Here', request.body);
-      
       // validate event
       var hash = crypto.createHmac('sha512', secret).update(JSON.stringify(request.body)).digest('hex');
 
-      console.log('Compare', hash, request.header('x-paystack-signature'));
-
       if (hash === request.header('x-paystack-signature')) {
-
       var result = request.body;
-      console.log('result', result);
 
       const user = await User.findBy('email', result.data.customer.email)
       if (result.event === 'charge.success') {
+
         const billing = await Billing.query().where('user_id', user.id).first()
-        console.log('billing', billing);
         if (!billing.is_verified) {
           if (result.data.status === 'success') {
             billing.email = result.data.customer.email
@@ -209,10 +204,12 @@ class SubscriptionController {
             billing.is_verified = true
             await billing.save()
 
-            console.log('billing2', billing);
-
             // Refund 
             await paystack.refund.create({ transaction: result.data.id, amount: result.data.amount })
+
+            const project = await Project.query().where('user_id', user.id).first()
+            project.is_active = true
+            await project.save()
 
           } else {
             return response.status(400).json({
@@ -224,7 +221,6 @@ class SubscriptionController {
         }
         response.send(200);
       } else if (result.event === 'subscription.create') {
-
         const subscription = await Subscription.query().where('user_id', user.id).first()
         subscription.is_active = true
         subscription.start_date = new Date()

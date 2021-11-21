@@ -49,11 +49,16 @@ Route.put('/reset-password/:verification_code','ProfileManagement/PasswordContro
 // =========== PROFILE MANAGEMENT ROUTE ENDS ========================
 
 
-// =========== DOMAIN MANAGEMENT ROUTE STARTS ========================
-Route.post('/auth/domains', 'DomainManagement/DomainController.addDomain').validator('AddDomain').middleware(['auth:jwt']);
+// =========== PROJECT MANAGEMENT ROUTE STARTS ========================
+Route.post('/auth/projects', 'ProjectManagement/ProjectController.addProject').validator('AddProject').middleware(['auth:jwt']);
+Route.patch('/auth/projects/:project_id', 'ProjectManagement/ProjectController.editProject').validator('EditProject').middleware(['auth:jwt']);
+Route.delete('/auth/projects/:project_id', 'ProjectManagement/ProjectController.deleteProject').middleware(['auth:jwt']);
+Route.patch('/auth/projects/monitoring-status/:project_id', 'ProjectManagement/ProjectController.toggleProjectMonitoringStatus').validator('MonitoringStatus').middleware(['auth:jwt']);
+Route.get('/engine/projects', 'ProjectManagement/ProjectController.projectListing')//.middleware(['auth:jwt']);
+Route.patch('/engine/projects/report-status/:project_id', 'ProjectManagement/ProjectController.updateProjectReportStatus').validator('ProjectReportStatus')//.middleware(['auth:jwt']);
 
 
-// =========== DOMAIN MANAGEMENT ROUTE ENDS ========================
+// =========== PROJECT MANAGEMENT ROUTE ENDS ========================
 
 
 // =========== BILLING ROUTE STARTS ========================
@@ -72,4 +77,5 @@ Route.post('/payment/webhook', 'Billing/SubscriptionController.paymentWebHook')
 
 
 // Route.on('/email').render('emails.verification_email');
-Route.on('/email').render('emails.reset_password_email');
+// Route.on('/email').render('emails.reset_password_email');
+Route.on('/email').render('emails.project_report_status_email');
