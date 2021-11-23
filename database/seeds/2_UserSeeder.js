@@ -32,7 +32,7 @@ class UserSeeder {
       {
         first_name: 'Uptime',
         last_name: 'Admin',
-        email: 'admin@uptime.com',
+        email: 'admin@uptime.ng',
         phone_number: '08012345678',
         password: seedPassword,
         is_active: true,
