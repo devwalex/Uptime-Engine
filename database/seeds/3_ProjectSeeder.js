@@ -36,7 +36,7 @@ class ProjectSeeder {
   {
     user_id: user.id,
     description: 'Bet9ja',
-    address: 'https://https://bet9ja.com',
+    address: 'https://bet9ja.com',
     type: 'domain_name',
     current_status: null,
     last_status_change_time: null,
