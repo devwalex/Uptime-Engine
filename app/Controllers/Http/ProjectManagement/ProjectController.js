@@ -166,6 +166,32 @@ class ProjectController {
     }
   }
 
+  async myProjects({ response, auth }){
+    try {
+      const authenticatedUser = await auth.current.user;
+      const projects = await Project.query()
+      .where('user_id', authenticatedUser.id)
+      .where('is_deleted', false)
+      .fetch()
+
+      return response.status(200).json({
+        status: 'Success',
+        message: 'Fetched all my project successfully.',
+        status_code: 200, 
+        results: projects
+      });
+
+    } catch (error) {
+      console.error('My Project Error ==>', error);
+      return response.status(500).json({
+        status: 'Internal Server Error',
+        message: 'An unexpected error occurred',
+        status_code: 500,
+        error,
+      });
+    }
+  }
+
   async projectListing({ response }){
     try {
       const projects = await Project.query()

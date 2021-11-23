@@ -53,6 +53,7 @@ Route.put('/reset-password/:verification_code','ProfileManagement/PasswordContro
 Route.post('/auth/projects', 'ProjectManagement/ProjectController.addProject').validator('AddProject').middleware(['auth:jwt']);
 Route.patch('/auth/projects/:project_id', 'ProjectManagement/ProjectController.editProject').validator('EditProject').middleware(['auth:jwt']);
 Route.delete('/auth/projects/:project_id', 'ProjectManagement/ProjectController.deleteProject').middleware(['auth:jwt']);
+Route.get('/auth/projects', 'ProjectManagement/ProjectController.myProjects').middleware(['auth:jwt']);
 Route.patch('/auth/projects/monitoring-status/:project_id', 'ProjectManagement/ProjectController.toggleProjectMonitoringStatus').validator('MonitoringStatus').middleware(['auth:jwt']);
 Route.get('/engine/projects', 'ProjectManagement/ProjectController.projectListing')//.middleware(['auth:jwt']);
 Route.patch('/engine/projects/report-status/:project_id', 'ProjectManagement/ProjectController.updateProjectReportStatus').validator('ProjectReportStatus')//.middleware(['auth:jwt']);
