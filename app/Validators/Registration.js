@@ -1,5 +1,7 @@
 'use strict'
 
+const { rule } = use('Validator');
+
 class Registration {
   get rules () {
     return {
@@ -8,7 +10,13 @@ class Registration {
       // phone_number: 'required|integer|max:14|min:11|unique:users,phone_number',
       email: 'required|email|unique:users,email',
       password: 'required|min:6',
-      domain_name: 'required|url|unique:domains,domain_name'
+      domain_name:  [
+        rule('required'),
+        rule('exists', ['projects','address','is_deleted','false']),
+        rule('url'),
+      ],
+      
+      // 'required|url|unique:domains,domain_name'
     }
   }
 
@@ -30,7 +38,7 @@ class Registration {
       'password.min': 'Password must be atleast six characters.',
       'domain_name.required': 'Domain name is required.',
       'domain_name.url': 'Domain name must be a valid url.',
-      'domain_name.unique': 'This domain already exist in our system.',
+      'domain_name.exists': 'This domain already exist in our system.',
     };
   }
 
