@@ -14,6 +14,7 @@ class ProjectsSchema extends Schema {
       table.datetime('last_status_change_time')
       table.string('type').notNullable()
       table.datetime('ssl_expiration_date')
+      table.boolean('has_ssl_expired').defaultTo(false)
       table.boolean('is_monitored').defaultTo(false)
       table.boolean('is_active').defaultTo(false)
       table.boolean('is_deleted').defaultTo(false)

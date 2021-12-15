@@ -177,7 +177,7 @@ class ProjectController {
       return response.status(200).json({
         status: 'Success',
         message: 'Fetched all my project successfully.',
-        status_code: 200, 
+        status_code: 200,
         results: projects
       });
 
@@ -203,7 +203,7 @@ class ProjectController {
       return response.status(200).json({
         status: 'Success',
         message: 'Fetched all active project successfully.',
-        status_code: 200, 
+        status_code: 200,
         results: projects
       });
 
@@ -221,7 +221,7 @@ class ProjectController {
   async updateProjectReportStatus({response, request, params: { project_id }}){
     try {
 
-      const { current_status, last_status_change_time, ssl_expiration_date, reason, load_time } = request.post();
+      const { current_status, last_status_change_time, ssl_expiration_date, has_ssl_expired, reason, load_time } = request.post();
 
       const project = await Project.query()
       .where('id', project_id)
@@ -255,6 +255,7 @@ class ProjectController {
       project.current_status = current_status
       project.last_status_change_time = last_status_change_time
       project.ssl_expiration_date = ssl_expiration_date
+      project.has_ssl_expired = has_ssl_expired
       await project.save()
 
 
@@ -269,7 +270,7 @@ class ProjectController {
       const user = await User.query()
       .where('id', project.user_id)
       .first();
-      
+
       const mailDetails = {
         first_name: user.first_name,
         last_name: user.last_name,
@@ -278,8 +279,13 @@ class ProjectController {
         report
       };
 
+      if (project.has_ssl_expired) {
+        // It triggers the sendSslExpiryReport event
+        Event.fire('sendSslExpiryReport', mailDetails);
+      }
+
       // It triggers the sendProjectCurrentStatusReport event
-      Event.fire('sendProjectCurrentStatusReport', mailDetails); 
+      Event.fire('sendProjectCurrentStatusReport', mailDetails);
 
       return response.status(200).json({
         status: 'Success',
