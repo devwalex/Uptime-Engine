@@ -24,3 +24,11 @@ Event.on('sendProjectCurrentStatusReport', async (mailDetails) => {
     message.subject('Your Project Current Status Report');
   });
 });
+
+Event.on('sendSslExpiryReport', async (mailDetails) => {
+  await Mail.send('emails.project_ssl_expiry_report_email', mailDetails, (message) => {
+    message.from('no-reply@uptime.ng', 'Uptime.ng');
+    message.to(mailDetails.email);
+    message.subject('Your Project SSL Expiry Report');
+  });
+});

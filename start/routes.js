@@ -79,4 +79,6 @@ Route.post('/payment/webhook', 'Billing/SubscriptionController.paymentWebHook')
 
 // Route.on('/email').render('emails.verification_email');
 // Route.on('/email').render('emails.reset_password_email');
-Route.on('/email').render('emails.project_report_status_email');
+// Route.on('/email').render('emails.project_report_status_email');
+Route.on('/email').render('emails.project_ssl_expiry_report_email');
+

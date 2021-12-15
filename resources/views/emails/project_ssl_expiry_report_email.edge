@@ -1,0 +1,26 @@
+@layout('emails.email_base')
+@section('email_body')
+
+  <tr>
+		<td style="font-family: sans-serif; vertical-align: top;">
+
+      <p style="font-family: sans-serif; color:#3d3c3c; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 20px; Margin-top: 20px;">
+        Hi {{first_name}} {{last_name}},
+      </p>
+
+      <p style="font-family: sans-serif; color:#3d3c3c; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 20px;">
+        Your project {{project.description}} SSL certificate have expired on {{project.ssl_expiration_date}}
+      </p>
+
+
+      <p style="font-family: sans-serif; color:#3d3c3c; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 20px; Margin-top: 50px;">
+      Warm Regards, <br>
+      Uptime.ng Team.
+      </p>
+
+
+
+		</td>
+	</tr>
+
+@endsection
