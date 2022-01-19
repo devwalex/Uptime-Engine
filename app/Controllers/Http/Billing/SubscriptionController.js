@@ -37,7 +37,8 @@ class SubscriptionController {
       const subscription = new Subscription()
       subscription.user_id = authenticatedUser.id
       subscription.plan_code = plan_code
-      subscription.trial_period = 14
+      subscription.trial_period = 1  // Change to 14
+      subscription.created_at = '2022-01-18 13:22:00' //Remove this
       await subscription.save()
 
 
